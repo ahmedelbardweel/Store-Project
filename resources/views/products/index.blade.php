@@ -51,10 +51,6 @@
                     Original products at competitive prices
                 </li>
             </ul>
-            <a href="{{ route('products.index') }}"
-               class="inline-block px-8 py-3 rounded-xl bg-blue-500 hover:bg-emerald-500 text-white text-lg font-bold shadow transition">
-                Browse products
-            </a>
         </div>
     </div>
 
@@ -66,7 +62,7 @@
                 <a href="{{ route('products.index') }}"
                    class="px-5 py-1 flex-shrink-0 rounded-full text-sm font-bold transition
                    {{ !$selectedSlug ? 'bg-emerald-600 text-amber-500 bg-gray-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-emerald-800' }}">
-                    كل التصنيفات
+                     All
                 </a>
                 @foreach($slugs as $slug)
                     <a href="{{ route('products.index', ['slug' => $slug]) }}"

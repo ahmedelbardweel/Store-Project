@@ -43,7 +43,7 @@
         <!-- Logo & Brand -->
         <div class="flex items-center gap-4 flex-shrink-0">
             <span
-                class="text-xl font-extrabold text-emerald-600 dark:text-emerald-300 tracking-tight select-none mr-20 ml-5">
+                class="text-xl font-extrabold text-emerald-600 dark:text-emerald-300 tracking-tight select-none mr-20">
                 AHMED
             </span>
         </div>
@@ -63,7 +63,7 @@
                 >
                 <button type="submit"
                         class="h-10 px-4 flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-black rounded-xl font-semibold">
-                    <span class="material-symbols-outlined">search</span>
+                    <span class="material-symbols-outlined" style="color: #a3a3a3;" >search</span>
                 </button>
             </form>
             <ul id="suggestions"
@@ -79,7 +79,9 @@
                         <a href="{{ route('home') }}"
                            class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
                            title="الرئيسية">
-                            <span class="material-symbols-outlined text-[22px] align-middle">home</span>
+                                <span class="material-symbols-outlined  " style="color: #5e5e5e;" >
+                                home
+                                </span>
                         </a>
                     </li>
                     <!-- المنتجات -->
@@ -87,12 +89,13 @@
                         <a href="{{ route('products.index') }}"
                            class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
                            title="المنتجات">
-                            <span class="material-symbols-outlined">shopping_bag</span>
+                            <span class="material-symbols-outlined" style="color: #5e5e5e;">shopping_bag</span>
                         </a>
                     </li>
                     <!-- السلة -->
                     <li>
                         <a href="{{ route('cart.index') }}"
+                           style="color: #5e5e5e;"
                            class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
                            title="السلة">
                             <span class="material-symbols-outlined">add_shopping_cart</span>
@@ -102,6 +105,7 @@
                     @if(auth()->user()->role === 'admin')
                         <li>
                             <a href="{{ route('products.create') }}"
+                               style="color: #5e5e5e;"
                                class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
                                title="إضافة منتج جديد">
                                 <span class="material-symbols-outlined">add_circle</span>

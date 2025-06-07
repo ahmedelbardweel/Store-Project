@@ -111,10 +111,6 @@ class ProductController extends Controller
     }
 
     // عرض تفاصيل منتج
-    public function show(Product $product)
-    {
-        return view('products.show', compact('product'));
-    }
 
     // نموذج تعديل منتج (أدمن فقط)
     public function edit(Product $product)
@@ -166,4 +162,29 @@ class ProductController extends Controller
             ->route('products.index')
             ->with('success', 'The product has been successfully removed!');
     }
+
+    public function show($slug, $title = null)
+    {
+        // 1) حاول جلب المنتج كـ slug
+        $product = Product::where('slug', $slug)->first();
+
+        // 2) إذا ما وجدناه وبالمقابل slug هو رقم، جرب find بالـ id
+        if (! $product && is_numeric($slug)) {
+            $product = Product::find($slug);
+        }
+
+        // 3) إذا ما وجدناه بأي طريقة، أرسل 404
+        if (! $product) {
+            abort(404);
+        }
+
+        // 4) جلب 4 منتجات متشابهة (عشوائيًا)
+        $relatedProducts = Product::where('id', '<>', $product->id)
+            ->inRandomOrder()
+            ->take(20)
+            ->get();
+
+        return view('products.show', compact('product', 'relatedProducts'));
+    }
+
 }
