@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+/* -------------------------------------------
+   نعيد تعريف .h-auto كي يصبح height:auto
+------------------------------------------- */
+.h-auto {
+    height: fit-content !important;
+}
+
+@tailwind utilities;
+
