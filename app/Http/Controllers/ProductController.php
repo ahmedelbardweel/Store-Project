@@ -16,13 +16,10 @@ class ProductController extends Controller
     // قائمة المنتجات (بحث متطور)
     public function index(Request $request)
     {
-        // 1. جميع الـ Slugs المميزة الموجودة في قاعدة البيانات
         $slugs = \App\Models\Product::whereNotNull('slug')
             ->where('slug', '!=', '')
             ->distinct()
             ->pluck('slug');
-
-        // 2. البحث حسب slug (لو موجود في الرابط)
         $selectedSlug = $request->get('slug');
 
         $productsQuery = \App\Models\Product::query();
@@ -31,22 +28,34 @@ class ProductController extends Controller
             $productsQuery->where('slug', $selectedSlug);
         }
 
+        // منطق البحث الذكي
+        $exactProduct = null;
+        $similarProducts = collect();
+
         if ($request->has('search') && trim($request->search) !== '') {
             $search = trim($request->search);
-            $words = array_filter(explode(' ', $search));
 
-            $productsQuery->where(function($query) use ($words) {
-                foreach ($words as $word) {
-                    $query->orWhere('name', 'LIKE', "%{$word}%")
-                        ->orWhere('description', 'LIKE', "%{$word}%");
-                }
+            // 1. جلب كل المنتجات التي تحتوي الاسم أو الوصف
+            $productsFound = \App\Models\Product::where('name', 'LIKE', "%{$search}%")
+                ->orWhere('description', 'LIKE', "%{$search}%")
+                ->get();
+
+            // 2. المنتج المطابق تماماً (اسم المنتج = البحث)
+            $exactProduct = $productsFound->firstWhere('name', $search);
+
+            // 3. المنتجات المشابهة (يستثنى المطابق تماماً)
+            $similarProducts = $productsFound->filter(function ($product) use ($search) {
+                return $product->name !== $search;
             });
+
+            // لعرض النتائج فقط:
+            $products = collect(); // فارغة حتى لا تظهر كل المنتجات
+        } else {
+            // في حال لا يوجد بحث: كل المنتجات
+            $products = $productsQuery->latest()->get();
         }
 
-        $products = $productsQuery->latest()->get();
-
-        // لا تنس تمرير $slugs و $selectedSlug للواجهة
-        return view('products.index', compact('products', 'slugs', 'selectedSlug'));
+        return view('products.index', compact('products', 'slugs', 'selectedSlug', 'exactProduct', 'similarProducts'));
     }
 
 // بحث الاقتراحات (autocomplete)

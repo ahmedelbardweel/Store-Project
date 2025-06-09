@@ -12,7 +12,7 @@
         html { font-family: 'Cairo', sans-serif; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
+<body class="bg-white from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
 <!-- الهيدر -->
 
 <nav
@@ -77,7 +77,7 @@
                     </li>
                     <!-- السلة -->
                     <li>
-                        <a href="{{ route('cart.index') }}"
+                        <a href="{{ route('cart.show') }}"
                            class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
                            title="السلة">
                             <span class="material-symbols-outlined">add_shopping_cart</span>
@@ -172,7 +172,7 @@
 
 
 <!-- تفاصيل المنتج -->
-<div class="max-w-6xl mx-auto p-6 flex flex-col md:flex-row gap-10 mt-10 bg-white/90 dark:bg-gray-900/90  rounded-3xl border border-emerald-100 dark:border-gray-800">
+<div class="max-w-4xl mx-auto p-6 flex flex-col md:flex-row gap-10 mt-20 bg-white/90 dark:bg-gray-900/90  rounded-3xl border border-emerald-100 dark:border-gray-800">
     <!-- صور المنتج -->
     <div class="md:w-1/2 flex flex-col items-center" x-data="{ activeImg: 0, images: [
         @if($product->gallery)
@@ -205,7 +205,7 @@
     </div>
 
     <!-- بيانات المنتج -->
-    <div class="md:w-1/2 flex flex-col justify-between">
+    <div class=" flex flex-col">
         <div>
             <h1 class="text-3xl font-extrabold text-emerald-700 dark:text-emerald-200 mb-2">{{ $product->name }}</h1>
             <!-- تقييم (نجوم افتراضية أو ديناميكية) -->
@@ -239,7 +239,7 @@
             @endif
         </div>
         <!-- زر إضافة للسلة -->
-        <div class="flex flex-col gap-2 mt-2">
+        <div class="flex flex-col gap-2 mt-20">
             <form action="{{ route('cart.add', $product->id) }}" method="POST" class="w-full">
                 @csrf
                 <button type="submit"

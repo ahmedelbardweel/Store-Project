@@ -3,18 +3,17 @@
 @section('content')
     <style>
         [x-cloak] { display: none !important; }
-        /* أضف في ملف CSS لو تريد شريط تمرير رفيع */
-        ::-webkit-scrollbar {
-            height: 5px;
+        /* شريط التمرير مخفي */
+        .hide-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #ffffff;
-            border-radius: 2px;
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
     </style>
 
-    <div class="flex flex-col lg:flex-row items-center gap-12 py-16 px-8 bg-gradient-to-br from-blue-100 to-emerald-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl shadow-xl">
+    <div class="flex flex-col lg:flex-row items-center gap-12 py-16 px-8 bg-gradient-to-br from-blue-100 to-emerald-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl shadow-xl mb-10">
         <!-- Logo -->
         <div class="flex-shrink-0">
             <div class="w-48 h-48 bg-gradient-to-br from-emerald-400 to-blue-400 rounded-full flex items-center justify-center shadow-2xl overflow-hidden">
@@ -30,7 +29,7 @@
                 Welcome to <span class="text-blue-600 dark:text-blue-400">Store company</span>
             </h1>
             <p class="text-lg text-gray-700 dark:text-gray-200 mb-6 leading-relaxed">
-                We are in<span class="font-bold text-emerald-600">Store</span>We believe that precise marketing should be an easy and enjoyable experience for all customers.
+                We are in <span class="font-bold text-emerald-600">Store</span>. We believe that precise marketing should be an easy and enjoyable experience for all customers.
                 Our goal is to provide customers with high-quality products with distinctive designs.
                 The company was founded in 2024 and quickly became a leading brand in the e-commerce sector in the Arab world.
             </p>
@@ -54,20 +53,19 @@
         </div>
     </div>
 
-    <h2 class="text-3xl font-bold text-blue-700 dark:text-emerald-300 mb-10 tracking-tight"></h2>
-
+    {{-- تصنيفات Slugs --}}
     @if($slugs->count())
-        <div class="w-full overflow-x-auto">
-            <div class="flex gap-1 min-w-max" style="scrollbar-width: thin;">
+        <div class="w-full overflow-x-auto hide-scrollbar mb-10">
+            <div class="flex gap-2 min-w-max py-1">
                 <a href="{{ route('products.index') }}"
                    class="px-5 py-1 flex-shrink-0 rounded-full text-sm font-bold transition
-                   {{ !$selectedSlug ? 'bg-emerald-600 text-amber-500 bg-gray-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-emerald-800' }}">
-                     All
+                   {{ !$selectedSlug ? 'bg-emerald-600 text-black bg-gray-300 dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-emerald-100 dark:hover:bg-emerald-800' }}">
+                    All
                 </a>
                 @foreach($slugs as $slug)
                     <a href="{{ route('products.index', ['slug' => $slug]) }}"
                        class="px-5 py-1 flex-shrink-0 rounded-full text-sm font-bold transition
-                       {{ $selectedSlug == $slug ? 'bg-emerald-600 text-black bg-gray-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-emerald-500 dark:hover:bg-emerald-800' }}">
+                       {{ $selectedSlug == $slug ? 'bg-emerald-600 text-black bg-gray-300 dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-emerald-500 dark:hover:bg-emerald-800' }}">
                         {{ $slug }}
                     </a>
                 @endforeach
@@ -75,19 +73,17 @@
         </div>
     @endif
 
-
     @if (session('success'))
         <div class="mb-6 bg-emerald-100 border border-emerald-300 text-emerald-800 px-6 py-4 rounded-lg shadow">
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- هنا يبدأ منطق عرض المنتجات الذكي --}}
+    {{-- منطق البحث الذكي --}}
     @if(isset($exactProduct) && $exactProduct)
         <h3 class="text-xl font-bold text-emerald-600 mb-4">Exact match:</h3>
         <div class="grid grid-cols-1 gap-8 mb-8">
-            {{-- بطاقة المنتج المطابق --}}
-            @includeWhen(true, 'products._card', ['product' => $exactProduct])
+            @include('products._card', ['product' => $exactProduct])
         </div>
     @endif
 
@@ -95,14 +91,14 @@
         <h3 class="text-xl font-bold text-blue-700 mb-4">Similar products:</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             @foreach($similarProducts as $product)
-                @includeWhen(true, 'products._card', ['product' => $product])
+                @include('products._card', ['product' => $product])
             @endforeach
         </div>
     @elseif(isset($products) && $products->count())
         <h3 class="text-2xl font-bold text-blue-700 dark:text-emerald-300 mb-10 tracking-tight"></h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             @foreach($products as $product)
-                @includeWhen(true, 'products._card', ['product' => $product])
+                @include('products._card', ['product' => $product])
             @endforeach
         </div>
     @else
@@ -110,5 +106,4 @@
             There are currently no products.
         </p>
     @endif
-
 @endsection

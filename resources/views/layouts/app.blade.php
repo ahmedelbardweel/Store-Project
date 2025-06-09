@@ -63,7 +63,7 @@
                 >
                 <button type="submit"
                         class="h-10 px-4 flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-black rounded-xl font-semibold">
-                    <span class="material-symbols-outlined" style="color: #a3a3a3;" >search</span>
+                    <span class="material-symbols-outlined" style="color: #6a6a6a;" >search</span>
                 </button>
             </form>
             <ul id="suggestions"
@@ -78,7 +78,7 @@
                     <li>
                         <a href="{{ route('home') }}"
                            class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                           title="الرئيسية">
+                           title="Home">
                                 <span class="material-symbols-outlined  " style="color: #5e5e5e;" >
                                 home
                                 </span>
@@ -88,26 +88,27 @@
                     <li>
                         <a href="{{ route('products.index') }}"
                            class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                           title="المنتجات">
+                           title="Products">
                             <span class="material-symbols-outlined" style="color: #5e5e5e;">shopping_bag</span>
                         </a>
                     </li>
                     <!-- السلة -->
                     <li>
-                        <a href="{{ route('cart.index') }}"
+                        <a href="{{ route('cart.show') }}"
                            style="color: #5e5e5e;"
                            class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                           title="السلة">
+                           title="Cart">
                             <span class="material-symbols-outlined">add_shopping_cart</span>
                         </a>
                     </li>
+
                     <!-- إضافة منتج جديد (أدمن فقط) -->
                     @if(auth()->user()->role === 'admin')
                         <li>
                             <a href="{{ route('products.create') }}"
                                style="color: #5e5e5e;"
                                class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                               title="إضافة منتج جديد">
+                               title="Add a new product">
                                 <span class="material-symbols-outlined">add_circle</span>
                             </a>
                         </li>
@@ -142,22 +143,32 @@
                         </div>
                         <a href="{{ route('profile.edit') }}"
                            class="block w-full py-2 my-2 rounded-lg bg-blue-50 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-700 text-blue-700 dark:text-blue-300 font-semibold transition">
-                            الملف الشخصي
+                            Profile
                         </a>
+                        <a href="{{ route('orders.history') }}" class="block w-full py-2 my-2 rounded-lg bg-yellow-200 dark:bg-gray-800 hover:bg-yellow-400 dark:hover:bg-blue-700 text-black dark:text-blue-300 font-semibold transition">All Order</a>
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit"
                                     class="w-full py-2 mt-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold shadow transition">
-                                تسجيل الخروج
+                                Log out
                             </button>
                         </form>
                     </div>
                 </div>
             @else
+                    <a href="{{ route('home') }}"
+                       class="flex items-center justify-center w-8 h-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
+                       title="Home">
+                                <span class="material-symbols-outlined  " style="color: #5e5e5e;" >
+                                home
+                                </span>
+                    </a>
                 <a href="{{ route('login') }}"
                    class="px-5 py-2 rounded-xl bg-blue-500 hover:bg-blue-700 text-white font-semibold shadow transition">
-                    تسجيل الدخول
+                    Login
                 </a>
+
             @endauth
         </div>
     </div>
@@ -170,7 +181,7 @@
                 type="text"
                 name="search"
                 value="{{ request('search') }}"
-                placeholder="ابحث عن منتج أو نوع المنتج..."
+                placeholder="Search for a product or product type..."
                 autocomplete="off"
                 class="flex-1 h-11 px-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition text-base w-full"
             >
@@ -211,7 +222,7 @@
                         list += '<li class="px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200" onclick="selectSuggestion(\'' + inputId + '\', \'' + suggestionsId + '\', \'' + item.replace(/'/g, "\\'") + '\')">' + item + '</li>';
                     });
                 } else {
-                    list = '<li class="px-4 py-2 text-gray-400">لا يوجد نتائج</li>';
+                    list = '<li class="px-4 py-2 text-gray-400">No results</li>';
                 }
                 $('#' + suggestionsId).html(list).show();
             });
