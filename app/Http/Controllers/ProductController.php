@@ -58,30 +58,6 @@ class ProductController extends Controller
         return view('products.index', compact('products', 'slugs', 'selectedSlug', 'exactProduct', 'similarProducts'));
     }
 
-// بحث الاقتراحات (autocomplete)
-    public function autocomplete(Request $request)
-    {
-        $results = [];
-
-        if ($request->has('q')) {
-            $term = trim($request->q);
-            $words = array_filter(explode(' ', $term));
-
-            $query = Product::query();
-
-            $query->where(function($q) use ($words) {
-                foreach ($words as $word) {
-                    $q->orWhere('name', 'LIKE', "%{$word}%")
-                        ->orWhere('description', 'LIKE', "%{$word}%");
-                }
-            });
-
-            $results = $query->limit(8)->pluck('name');
-        }
-
-        return response()->json($results);
-    }
-
     // نموذج إضافة منتج (فقط للأدمن)
     public function create()
     {
@@ -118,8 +94,6 @@ class ProductController extends Controller
             ->route('products.index')
             ->with('success', 'Product added successfully!');
     }
-
-    // عرض تفاصيل منتج
 
     // نموذج تعديل منتج (أدمن فقط)
     public function edit(Product $product)
@@ -172,6 +146,7 @@ class ProductController extends Controller
             ->with('success', 'The product has been successfully removed!');
     }
 
+// عرض التفاصيللاالمنتج
     public function show($slug, $title = null)
     {
         // 1) حاول جلب المنتج كـ slug
@@ -194,6 +169,30 @@ class ProductController extends Controller
             ->get();
 
         return view('products.show', compact('product', 'relatedProducts'));
+    }
+
+    // بحث الاقتراحات (autocomplete)
+    public function autocomplete(Request $request)
+    {
+        $results = [];
+
+        if ($request->has('q')) {
+            $term = trim($request->q);
+            $words = array_filter(explode(' ', $term));
+
+            $query = Product::query();
+
+            $query->where(function($q) use ($words) {
+                foreach ($words as $word) {
+                    $q->orWhere('name', 'LIKE', "%{$word}%")
+                        ->orWhere('description', 'LIKE', "%{$word}%");
+                }
+            });
+
+            $results = $query->limit(8)->pluck('name');
+        }
+
+        return response()->json($results);
     }
 
 }

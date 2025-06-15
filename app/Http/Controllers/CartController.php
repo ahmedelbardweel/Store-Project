@@ -51,19 +51,19 @@ class CartController extends Controller
         return back();
     }
 
-
-    public function empty()
+//    السلة
+    public function cart()
     {
-        $user = auth()->user();
-        $order = \App\Models\Order::where('user_id', $user->id)->where('status', 'cart')->first();
-        if ($order) {
-            $order->items()->delete();
-            $order->total = 0;
-            $order->save();
-        }
-        return redirect()->route('cart.show')->with('success', 'تم إفراغ السلة بنجاح!');
+        $user = Auth::user();
+        $order = Order::where('user_id', $user->id)->where('status', 'cart')->first();
+
+        $orderItems = $order ? $order->items()->with('product')->get() : collect();
+        $total = $order ? $order->total : 0;
+
+        return view('cart.index', compact('orderItems', 'total'));
     }
 
+// اضافة الى السلة
     public function addToCart($productId)
     {
         $user = Auth::user();
@@ -98,16 +98,20 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'تمت إضافة المنتج إلى السلة بنجاح!');
     }
 
-    public function cart()
+// افراغ السلة
+    public function empty()
     {
-        $user = Auth::user();
-        $order = Order::where('user_id', $user->id)->where('status', 'cart')->first();
-
-        $orderItems = $order ? $order->items()->with('product')->get() : collect();
-        $total = $order ? $order->total : 0;
-
-        return view('cart.index', compact('orderItems', 'total'));
+        $user = auth()->user();
+        $order = \App\Models\Order::where('user_id', $user->id)->where('status', 'cart')->first();
+        if ($order) {
+            $order->items()->delete();
+            $order->total = 0;
+            $order->save();
+        }
+        return redirect()->route('cart.show')->with('success', 'تم إفراغ السلة بنجاح!');
     }
+
+//    عرض السلة
     public function showCart()
     {
         $user = Auth::user();
@@ -151,6 +155,7 @@ class CartController extends Controller
         return back();
     }
 
+//  لفحص قبل الشراء
     public function checkout()
     {
         $user = auth()->user();
@@ -169,6 +174,7 @@ class CartController extends Controller
         return redirect()->route('cart.show')->with('success', 'تم إكمال الطلب بنجاح! سنقوم بمعالجة طلبك قريبًا.');
     }
 
+//  سجل الطلبات
     public function ordersHistory()
     {
         $user = auth()->user();
@@ -180,6 +186,7 @@ class CartController extends Controller
         return view('cart.orders_history', compact('orders'));
     }
 
+// عرض الطلبيات الالي ضيفتها
     public function showOrder($id)
     {
         $user = auth()->user();
@@ -192,7 +199,7 @@ class CartController extends Controller
         return view('cart.order_details', compact('order'));
     }
 
-
+//  نزيل الفاتورة بعد الاكتمال
     public function downloadInvoice($id)
     {
         $order = Order::with('orderItems.product')->findOrFail($id);

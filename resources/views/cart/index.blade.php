@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mx-auto max-w-5xl px-4 py-12">
+    <div class="container mx-auto max-w-1xl">
 
         <div class="flex items-center mb-10 gap-3">
             <span class="text-4xl">🛒</span>
@@ -10,7 +10,7 @@
 
         {{-- رسائل النجاح أو الخطأ --}}
         @if(session('success'))
-            <div class="mb-6 bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 px-6 py-4 rounded-xl shadow">
+            <div class="mb-6 bg-green-300 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-700 text-emerald-900 dark:text-emerald-200 px-6 py-4 rounded-xl shadow">
                 {{ session('success') }}
             </div>
         @endif
@@ -21,14 +21,14 @@
         @endif
 
         @if($orderItems->isEmpty())
-            <div class="bg-yellow-100 dark:bg-yellow-950 text-yellow-900 dark:text-yellow-200 py-12 px-6 rounded-3xl text-center text-xl shadow font-semibold flex flex-col items-center gap-2">
+            <div class="bg-yellow-100 dark:bg-yellow-950 text-black dark:text-yellow-200 py-12 px-6 rounded-3xl text-center text-xl shadow font-semibold flex flex-col items-center gap-2">
                 <span class="text-5xl mb-2">🪹</span>
                 The cart is currently empty.
             </div>
         @else
-            <div class="overflow-x-auto bg-white/95 dark:bg-gray-900/95 rounded-3xl shadow-xl ring-1 ring-emerald-100 dark:ring-gray-700">
+            <div class="overflow-x-auto bg-white/95 dark:bg-gray-900/95 rounded-1xl shadow-xl ring-1 ring-emerald-100 dark:ring-gray-700">
                 <table class="min-w-full text-center text-base">
-                    <thead class="bg-emerald-50 dark:bg-emerald-900/80">
+                    <thead class="bg-blue-100 dark:bg-emerald-900/80">
                     <tr class="font-bold text-emerald-800 dark:text-emerald-300">
                         <th class="py-4 px-2">Product</th>
                         <th class="py-4 px-2">Price</th>
@@ -41,8 +41,8 @@
                     <tbody>
                     @foreach($orderItems as $item)
                         <tr class="border-b border-emerald-50 dark:border-gray-700 hover:bg-emerald-50/40 dark:hover:bg-gray-800/70 transition">
-                            <td class="py-5 px-2">
-                                <div class="flex items-center gap-3 justify-center">
+                            <td class="px-6 py-4 flex items-center gap-3">
+                                <div class="flex items-center gap-3 justify-center ">
                                     @if($item->product->img)
                                         <img src="{{ $item->product->img }}" alt="{{ $item->product->name }}"
                                              class="w-14 h-14 object-cover rounded-xl shadow border bg-white dark:bg-gray-800">
@@ -82,11 +82,11 @@
                                 </div>
                             </td>
                             <!-- حذف -->
-                            <td class="py-5 pl-10">
-                                <form action="{{ route('cart.remove', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                            <td class="py-5 px-2 font-semibold">
+                                <form action="{{ route('cart.remove', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this product?');" style="justify-self: center;">
                                     @csrf
                                     <button type="submit"
-                                            class="w-8 h-8 flex items-center justify-center bg-red-300 dark:bg-red-100 hover:bg-red-200 text-black dark:text-red-300 rounded-xl font-bold"
+                                            class="rounded-xl bg-red-300 p-2 font-bold"
                                             title="Remove">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
                                              stroke="currentColor" stroke-width="2">

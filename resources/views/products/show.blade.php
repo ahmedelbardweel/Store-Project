@@ -47,8 +47,8 @@
                     class="flex h-10 px-5"
                 >
                 <button type="submit"
-                        class="h-10 px-4 flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-black rounded-xl font-semibold">
-                    <span class="material-symbols-outlined">search</span>
+                        class="h-10 px-4 flex items-center justify-center bg-blue-400 hover:bg-blue-300 text-white font-semibold">
+                    <span class="material-symbols-outlined" style="color: #ffffff;" >search</span>
                 </button>
             </form>
             <ul id="suggestions"

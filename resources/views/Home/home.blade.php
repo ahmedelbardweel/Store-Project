@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
     {{-- HERO: Modern Studio/Firebase Style --}}
-    <div class="relative min-h-[60vh] flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br from-blue-50 via-emerald-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div class="relative min-h-[60vh] flex flex-col justify-center items-center overflow-hidden bg-gradient-to-br from-blue-50 via-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
         {{-- Animating background shapes --}}
         <div class="absolute left-[-120px] top-[-100px] w-[350px] h-[350px] bg-blue-400/10 rounded-full blur-2xl animate-spin-slow z-0"></div>
         <div class="absolute right-[-90px] bottom-[-80px] w-[220px] h-[220px] bg-emerald-400/10 rounded-full blur-2xl animate-pulse z-0"></div>
@@ -14,7 +14,7 @@
 
         {{-- Content --}}
         <div class="relative z-10 max-w-4xl w-full mx-auto text-center py-20 px-6">
-            <div class="mx-auto flex flex-col md:flex-row items-center md:justify-between gap-12">
+            <div class="mx-auto flex flex-col md:flex-row items-center md:justify-between">
                 {{-- Left: Headline + CTA --}}
                 <div class="flex-1 flex flex-col items-center md:items-start text-center md:text-left gap-7">
                     <h1 class="text-4xl md:text-5xl font-black leading-tight text-emerald-700 dark:text-emerald-300 animate__animated animate__fadeInDown">
@@ -133,7 +133,7 @@
                 @foreach([
                   ['name' => 'Ahmed Taha', 'role' => 'CEO', 'img' => 'https://randomuser.me/api/portraits/men/31.jpg'],
                   ['name' => 'Mona Fathy', 'role' => 'Marketing', 'img' => 'https://randomuser.me/api/portraits/women/68.jpg'],
-                  ['name' => 'Rami Hassan', 'role' => 'Developer', 'img' => 'https://randomuser.me/api/portraits/men/54.jpg']
+                  ['name' => 'Ahmed Elbardawell', 'role' => 'Developer', 'img' => '/images/ahmed.png']
                 ] as $member)
                     <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 w-56 flex flex-col items-center animate__animated animate__fadeInUp">
                         <img src="{{ $member['img'] }}" class="w-20 h-20 rounded-full border-4 border-blue-200 dark:border-emerald-500 shadow mb-3" alt="{{ $member['name'] }}">

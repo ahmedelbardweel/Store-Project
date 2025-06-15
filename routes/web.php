@@ -14,8 +14,28 @@ use App\Http\Controllers\HomeController;
 |--------------------------------------------------------------------------
 */
 
+
 // الصفحة الرئيسية
 Route::get('/', [HomeController::class, 'home'])->name('home');
+
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard الأدمن
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+
+    // المنتجات
+    Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class);
+
+    // الطلبات
+    Route::resource('orders', \App\Http\Controllers\Admin\AdminOrderController::class)->only(['index', 'show', 'update']);
+
+    // الإحصائيات (التقارير)
+    Route::resource('reports', \App\Http\Controllers\Admin\AdminReportController::class); // أزل ['as' => 'admin']
+
+    Route::get('/reports/sales', [\App\Http\Controllers\Admin\AdminReportController::class, 'sales'])->name('reports.sales');
+
+    // التقييمات
+    Route::get('/reviews', [\App\Http\Controllers\Admin\AdminReviewController::class, 'index'])->name('reviews.index');
+});
 
 // ------------------ منتجات (عامة) ------------------
 
@@ -26,6 +46,12 @@ Route::get('/products', [ProductController::class, 'index'])
 // اقتراحات البحث (Autocomplete) - متاحة للجميع
 Route::get('/products/autocomplete', [ProductController::class, 'autocomplete'])
     ->name('products.autocomplete');
+
+// routes/web.php
+
+
+
+
 
 // ------------------ إدارة المنتجات (محمي بالأدمن) ------------------
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -49,6 +75,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])
         ->name('products.destroy');
 });
+
+
+
 
 // ------------------ عرض تفاصيل المنتج (Slug) ------------------
 // يُعرّف بعد مسارات الإدارة حتى لا يتضارب مع "create" أو "autocomplete"

@@ -23,13 +23,17 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // إعادة التوجيه حسب الدور
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard'); // أو: return redirect('/admin/dashboard');
+        } else {
+            return redirect()->intended(RouteServiceProvider::HOME); // غالبا /dashboard
+        }
     }
 
     /**
@@ -43,6 +47,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect('/');
     }
 }

@@ -9,68 +9,78 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        // إذا تشغّل أكثر من مرة، نمسح الجدول أولًا
-        \DB::table('products')->truncate();
-
-        // هنا قائمة 8 سلج فقط
-        $slugs = [
-            'car',
-            'clothes',
-            'watch',
-            'electronics',
-            'furniture',
-            'book',
-            'phone',
-            'toy'
+        $products = [
+            [
+                'name' => 'iPhone 15 Pro Max',
+                'description' => 'هاتف ذكي حديث من أبل بشاشة Super Retina XDR وكاميرا ثلاثية.',
+                'slug' => 'phone',
+                'price' => 1099,
+                'img' => 'https://images.unsplash.com/photo-1512499617640-c2f999018b72?auto=format&fit=crop&w=800&q=80'
+            ],
+            [
+                'name' => 'Tesla Model S',
+                'description' => 'سيارة كهربائية فاخرة بمدى طويل وتسارع عالي وتقنيات ذكية.',
+                'slug' => 'car',
+                'price' => 90000,
+                'img' => 'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80'
+            ],
+            [
+                'name' => 'Rolex Submariner',
+                'description' => 'ساعة فاخرة مقاومة للماء، أيقونة في عالم الساعات السويسرية.',
+                'slug' => 'watch',
+                'price' => 12500,
+                'img' => 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=800&q=80'
+            ],
+            [
+                'name' => 'Modern Sofa',
+                'description' => 'كنبة عصرية مريحة بتصميم أنيق ولون رمادي يناسب جميع الديكورات.',
+                'slug' => 'furniture',
+                'price' => 799,
+                'img' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80'
+            ],
+            [
+                'name' => 'The Lean Startup',
+                'description' => 'كتاب مميز حول تطوير المشاريع الناشئة باستخدام منهجية اللين.',
+                'slug' => 'book',
+                'price' => 29,
+                'img' => 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=80'
+            ],
+            [
+                'name' => 'Kids Teddy Bear',
+                'description' => 'دبدوب للأطفال من قماش قطني عالي الجودة وصديق للبيئة.',
+                'slug' => 'toy',
+                'price' => 19,
+                'img' => 'https://images.unsplash.com/photo-1612831810112-3c8282b9ae93?auto=format&fit=crop&w=800&q=80'
+            ],
+            [
+                'name' => 'Nike Air Max',
+                'description' => 'حذاء رياضي أصلي من نايك بتقنية الهواء وألوان شبابية.',
+                'slug' => 'clothes',
+                'price' => 120,
+                'img' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80'
+            ],
+            [
+                'name' => 'Sony WH-1000XM4',
+                'description' => 'سماعات رأس لاسلكية بإلغاء ضجيج احترافي وجودة صوت فائقة.',
+                'slug' => 'electronics',
+                'price' => 349,
+                'img' => 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80'
+            ],
         ];
 
-        // مصفوفة صور مشتركة لكل السلج
-        $images = [
-            // صور سيارات
-            'https://images.unsplash.com/photo-1517949908114-8772002a5f24?auto=format&fit=crop&w=600&q=80',
-            // صور ألبسة
-            'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
-            // صور ساعات
-            'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=600&q=80',
-            // صور إلكترونيات
-            'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80',
-            // صور أثاث
-            'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
-            // صور كتب
-            'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80',
-            // صور هواتف
-            'https://images.unsplash.com/photo-1512499617640-c2f999018b72?auto=format&fit=crop&w=600&q=80',
-            // صور ألعاب
-            'https://images.unsplash.com/photo-1612831810112-3c8282b9ae93?auto=format&fit=crop&w=600&q=80',
-        ];
-
-        $descriptions = [
-            'High quality and durable product.',
-            'Stylish design suitable for all users.',
-            'Enhanced performance with latest technology.',
-            'Comfortable and ergonomic.',
-            'Perfect gift for special occasions.',
-            'Made from premium materials.',
-            'Easy to use and maintain.',
-            'Top-rated by our customers.'
-        ];
-
-        $totalProducts = 0;
-
-        // نولّد لكل slug 25 منتجًا
-        foreach ($slugs as $slug) {
-            for ($i = 1; $i <= 25; $i++) {
-                Product::create([
-                    'name'        => ucfirst($slug) . " Product {$i}",
-                    'description' => $descriptions[array_rand($descriptions)],
-                    'slug'        => $slug, // كل المنتجات تحت هذا slug
-                    'price'       => rand(10, 500),
-                    'img'         => $images[array_rand($images)],
-                ]);
-                $totalProducts++;
-            }
+        foreach ($products as $item) {
+            Product::create($item);
         }
 
-        echo "Added {$totalProducts} products under " . count($slugs) . " slugs successfully!";
+        // توليد منتجات إضافية تلقائية متنوعة (إن أردت عدد أكبر)
+        for ($i = 1; $i <= 20; $i++) {
+            Product::create([
+                'name' => "منتج عشوائي رقم $i",
+                'description' => 'منتج افتراضي للتجربة وعرض التصميم.',
+                'slug' => 'random',
+                'price' => rand(10, 1000),
+                'img' => 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=80',
+            ]);
+        }
     }
 }

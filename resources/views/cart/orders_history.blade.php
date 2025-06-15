@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mx-auto max-w-4xl px-4 py-10">
+    <div class="container mx-auto max-w-1xl">
 
         <div class="flex items-center gap-3 mb-8">
             <span class="text-3xl">🧾</span>
@@ -16,9 +16,9 @@
                 You have no previous orders.
             </div>
         @else
-            <div class="overflow-x-auto bg-white/95 dark:bg-gray-900/95 rounded-2xl shadow-xl ring-1 ring-emerald-100 dark:ring-gray-700">
+            <div class="overflow-x-auto bg-white/95 dark:bg-gray-900/95 rounded-1xl shadow-xl ring-1 ring-emerald-100 dark:ring-gray-700">
                 <table class="min-w-full text-center text-base">
-                    <thead class="bg-emerald-50 dark:bg-emerald-900/80">
+                    <thead class="bg-blue-100 dark:bg-emerald-900/80">
                     <tr class="font-bold text-emerald-800 dark:text-emerald-300">
                         <th class="py-4 px-2">Order #</th>
                         <th class="py-4 px-2">Date</th>
@@ -58,23 +58,25 @@
                                 @endif
                             </td>
                             <td class="py-5 px-2 flex justify-center gap-2">
-                                <!-- View Details button -->
-                                <a href="{{ route('orders.show', $order->id) }}"
-                                   class="inline-flex items-center gap-1 px-4 py-2 bg-blue-400 hover:bg-blue-600 text-white rounded-xl font-bold shadow transition text-sm">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z" />
-                                    </svg>
-                                    View Details
-                                </a>
-                                <!-- Download Invoice icon button (Only if Completed) -->
-                                @if($order->status == 'completed')
-                                    <a href="{{ route('orders.invoice', $order->id) }}" title="Download Invoice"
-                                       class="w-9 h-9 flex items-center justify-center bg-white hover:bg-blue-100 dark:bg-white dark:hover:bg-white text-black rounded-xl">
+                                <div class=" flex justify-self-start gap-2">
+                                    <!-- View Details button -->
+                                    <a href="{{ route('orders.show', $order->id) }}"
+                                       class="inline-flex items-center gap-1 px-4 py-2 bg-blue-400 hover:bg-blue-600 text-white rounded-xl font-bold shadow transition text-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z" />
+                                        </svg>
+                                        View Details
+                                    </a>
+                                    <!-- Download Invoice icon button (Only if Completed) -->
+                                    @if($order->status == 'completed')
+                                        <a href="{{ route('orders.invoice', $order->id) }}" title="Download Invoice"
+                                           class="w-9 h-9 flex items-center justify-center bg-white hover:bg-blue-100 dark:bg-white dark:hover:bg-white text-black rounded-xl">
                                         <span class="material-symbols-outlined">
                                             download
                                         </span>
-                                    </a>
-                                @endif
+                                        </a>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                     @endforeach

@@ -20,9 +20,9 @@
                 <div class="absolute top-2 right-2 z-10">
                     <button
                         @click.stop="openMenu = !openMenu"
-                        class="p-2 bg-white dark:bg-gray-800 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 shadow transition"
+                        class="p-2 bg-gray-300 dark:bg-gray-800 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600 shadow transition"
                         title="إدارة المنتج">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600 dark:text-gray-300"
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black dark:text-gray-300"
                              fill="currentColor" viewBox="0 0 20 20">
                             <path d="M6 10a2 2 0 114 0 2 2 0 01-4 0zm5-2a2 2 0 100 4 2 2 0 000-4zm3 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
