@@ -9,44 +9,45 @@
                     <span class="bg-emerald-200 dark:bg-emerald-800 text-emerald-900 dark:text-emerald-100 rounded-full px-3 py-1 text-2xl">👑</span>
                     لوحة تحكم الأدمن
                 </h1>
-                <p class="text-gray-600 dark:text-gray-400 mt-2 text-base">تحكم في المنتجات، الطلبات، العملاء والتقارير عبر لوحة احترافية واحدة.</p>
+                <p class="text-gray-600 dark:text-gray-400 mt-2 text-base" style="font-size: 14px">تحكم في المنتجات، الطلبات، العملاء والتقارير عبر لوحة احترافية واحدة.</p>
             </div>
             <a href="{{ route('admin.products.create') }}"
                class="inline-flex items-center gap-2 bg-blue-300 from-emerald-600 to-blue-600 hover:from-emerald-800 hover:to-blue-700 text-black font-bold py-2.5 px-7 rounded-xl shadow-md hover:shadow-lg transition-all text-base">
-                <span class="material-symbols-outlined" style="font-size: 22px">add_circle</span>
+                <span class="material-symbols-outlined" style="font-size: 14px">add_circle</span>
                 إضافة منتج جديد
             </a>
         </div>
 
         {{-- === Cards إحصائيات سريعة === --}}
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-            <div class="bg-blue-100 dark:bg-gray-900 rounded-2xl shadow-md p-5 flex flex-col items-center justify-center">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12" style="font-size: 14px">
+            <div class="bg-blue-100 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-900 dark:to-gray-900 border border-emerald-100 dark:border-emerald-900 rounded-2xl shadow group hover:shadow-2xl transition p-5 flex flex-col items-center justify-center">
                 <div class="bg-blue-50 dark:bg-blue-900 rounded-2xl p-4 mb-2">
                     <span class="material-symbols-outlined text-blue-600 dark:text-blue-300">inventory_2</span>
                 </div>
-                <div class="text-xl font-bold text-gray-900 dark:text-emerald-200">{{ $productsCount ?? '--' }}</div>
-                <div class="text-gray-600 dark:text-gray-400 text-sm">عدد منتج</div>
+                <div class=" font-bold text-gray-900 dark:text-emerald-200 text-3xl">{{ $productsCount ?? '--' }}</div>
+                <div class="text-gray-600 dark:text-gray-400 text-xl">عدد منتج</div>
             </div>
-            <div class="bg-green-900 dark:bg-gray-900 rounded-2xl shadow-md p-5 flex flex-col items-center justify-center">
+            <div class="bg-green-900 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-900 dark:to-gray-900 border border-emerald-100 dark:border-emerald-900 rounded-2xl shadow group hover:shadow-2xl transition p-5 flex flex-col items-center justify-center">
                 <div class="bg-white dark:bg-emerald-900 rounded-2xl p-4 mb-2">
                     <span class="material-symbols-outlined text-green-800 dark:text-blue-200">shopping_cart</span>
                 </div>
-                <div class="text-xl font-bold text-white dark:text-emerald-200">{{ $ordersCount ?? '--' }}</div>
-                <div class="text-white dark:text-gray-400 text-sm">طلب</div>
+                <div class="text-3xl font-bold text-white dark:text-emerald-200">{{ $ordersCount ?? '--' }}</div>
+                <div class="text-white dark:text-gray-400 text-xl">طلب</div>
             </div>
-            <div class="bg-yellow-700 dark:bg-gray-900 rounded-2xl shadow-md p-5 flex flex-col items-center justify-center">
+            <div class="bg-yellow-700 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-900 dark:to-gray-900 border border-emerald-100 dark:border-emerald-900 rounded-2xl shadow group hover:shadow-2xl transition p-5 flex flex-col items-center justify-center">
                 <div class="bg-pink-50 dark:bg-pink-900 rounded-2xl p-4 mb-2">
                     <span class="material-symbols-outlined  dark:text-pink-300">people</span>
                 </div>
-                <div class="text-xl font-bold text-white dark:text-emerald-200">{{ $usersCount ?? '--' }}</div>
-                <div class="text-white dark:text-gray-400 text-sm">عميل مسجل</div>
+                <div class="text-3xl font-bold text-white dark:text-emerald-200">{{ $usersCount ?? '--' }}</div>
+                <div class="text-white dark:text-gray-400 text-xl">عميل مسجل</div>
             </div>
-            <div class="bg-yellow-100 dark:bg-gray-900 rounded-2xl shadow-md p-5 flex flex-col items-center justify-center">
+            <div class="bg-yellow-100  bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-900 dark:to-gray-900 border border-emerald-100 dark:border-emerald-900 rounded-2xl shadow group hover:shadow-2xl transition p-5 flex flex-col items-center justify-center">
                 <div class="bg-yellow-50 dark:bg-yellow-800 rounded-2xl p-4 mb-2">
                     <span class="material-symbols-outlined text-yellow-500 dark:text-yellow-200">attach_money</span>
                 </div>
-                <div class="text-xl font-bold text-gray-900 dark:text-emerald-200">{{ $totalSales ?? '--' }} $</div>
-                <div class="text-gray-600 dark:text-gray-400 text-sm">إجمالي المبيعات</div>
+                <div class="text-3xl font-bold text-gray-900 dark:text-emerald-200">{{ number_format($totalSales ?? 0) }} $
+                </div>
+                <div class="text-gray-600 dark:text-gray-400 text-xl">إجمالي المبيعات</div>
             </div>
         </div>
     </div>
@@ -116,7 +117,7 @@
                     <tr class="border-b dark:border-gray-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition">
                         <td class="py-2 px-4">{{ $order->id }}</td>
                         <td class="py-2 px-4">{{ $order->user->name ?? '---' }}</td>
-                        <td class="py-2 px-4 font-bold">{{ $order->total }} $</td>
+                        <td class="py-2 px-4 font-bold">{{ number_format($order->total ) }} $</td>
                         <td class="py-2 px-4">
                             @if($order->status === 'completed')
                                 <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-extrabold">مكتمل</span>

@@ -19,5 +19,12 @@ class Review extends Model
     // علاقات نموذجية
     public function user()   { return $this->belongsTo(User::class); }
     public function product(){ return $this->belongsTo(Product::class); }
+
+    // Review.php
+    public function reply()
+    {
+        return $this->hasOne(Reply::class);
+    }
+
 }
 

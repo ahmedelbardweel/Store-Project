@@ -17,32 +17,28 @@ class AdminReportController extends Controller
     }
     public function index()
     {
-        // ترتيب الأيام بالعربية (يبدأ من السبت، متوافق مع Laravel Carbon)
-        $daysOfWeek = ['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+        $startDate = now()->subDays(6)->startOfDay();
+        $endDate = now()->endOfDay();
 
-        // المبيعات لآخر 7 أيام (اليوم الحالي والست أيام السابقة)
-        $salesPerDay = [];
-        foreach ($daysOfWeek as $arabicDay) {
-            $salesPerDay[$arabicDay] = 0;
-        }
-
-        $startDate = Carbon::now()->subDays(6)->startOfDay();
         $orders = Order::where('created_at', '>=', $startDate)
             ->where('status', 'completed')
-            ->get();
+            ->get()
+            ->groupBy(function($order) {
+                return Carbon::parse($order->created_at)->format('Y-m-d');
+            });
 
-        // جمع المبيعات حسب اليوم العربي
-        foreach ($orders as $order) {
-            $dayName = Carbon::parse($order->created_at)->locale('ar')->dayName;
-            // لو اليوم غير معرف في الترتيب الافتراضي (احتمال تغيّر في بعض اللغات)، تجاهله
-            if (isset($salesPerDay[$dayName])) {
-                $salesPerDay[$dayName] += $order->total;
-            }
+        $labels = [];
+        $salesData = [];
+
+        for ($i = 0; $i < 7; $i++) {
+            $date = Carbon::parse($startDate)->addDays($i);
+            $dateStr = $date->format('Y-m-d');
+            $dayName = $date->locale('ar')->isoFormat('dddd');
+
+            $labels[] = $dayName . ' (' . $date->format('d/m') . ')';
+            $salesData[] = isset($orders[$dateStr]) ? $orders[$dateStr]->sum('total') : 0;
         }
 
-        $labels = array_values($daysOfWeek);           // ['السبت', ...]
-        $salesData = array_values($salesPerDay);       // [100, 200, ...]
-
+        // أرسل البيانات للواجهة
         return view('admin.reports.index', compact('labels', 'salesData'));
-    }
-}
+    }}

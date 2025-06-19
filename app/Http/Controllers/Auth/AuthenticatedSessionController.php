@@ -49,4 +49,20 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+    public function login(Request $request)
+    {
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        if (!$user || !\Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        // رجع بيانات المستخدم + api_key
+        return response()->json([
+            'user' => $user,
+            'api_key' => $user->api_key,
+        ]);
+    }
+
 }

@@ -10,31 +10,21 @@
     <!-- TailwindCSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
-
-    <!-- AlpineJS -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
-        html {
-            font-family: 'Cairo', 'Inter', sans-serif;
-        }
-        body{
-            background-color: rgb(255, 255, 255);
-        }
-        li{
-            list-style: none;
-        }
+        html { font-family: 'Cairo', 'Inter', sans-serif; }
+        body { background-color: rgb(255, 255, 255); }
+        li { list-style: none; }
     </style>
 </head>
 <body class="bg-gradient-to-tr from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
 
 <!-- Navigation Bar (Fixed) -->
-<nav
-    class="fixed top-0 left-0 w-full pt-1 pb-1 z-40 bg-white dark:bg-gray-900/95 shadow-sm backdrop-blur border-b border-gray-100 dark:border-gray-800">
+<nav class="fixed top-0 left-0 w-full pt-1 pb-1 z-40 bg-white dark:bg-gray-900/95 shadow-sm backdrop-blur border-b border-gray-100 dark:border-gray-800">
     <div class="flex items-center justify-between h-12 px-8">
         <!-- Logo & Brand -->
         <div class="flex items-center gap-4 flex-shrink-0">
-            <span
-                class="text-xl font-extrabold text-emerald-600 dark:text-emerald-300 tracking-tight select-none mr-20">
+            <span class="text-xl font-extrabold text-emerald-600 dark:text-emerald-300 tracking-tight select-none mr-20">
                 AHMED
             </span>
         </div>
@@ -48,7 +38,7 @@
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Searching..."
+                    placeholder="بحث..."
                     autocomplete="off"
                     class="flex h-10 px-5 rounded-xl"
                 >
@@ -61,155 +51,76 @@
                 class="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-gray-900 rounded-xl shadow border border-gray-200 dark:border-gray-700 hidden max-h-72 overflow-auto"></ul>
         </div>
 
-
-
-                    <!-- إضافة منتج جديد (أدمن فقط) -->
-                    @if(auth()->check() && auth()->user()->role === 'admin')
-
-                        <div class="flex gap-4 justify-self-center items-center">
-                            <li>
-                                <a href="{{ route('admin.dashboard') }}"
-                                   style="color: #5e5e5e;"
-                                   class="flex justify-center w-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                                   title="Add a new product">
-                                    <span class="material-symbols-outlined">add_circle</span>
-                                </a>
-                            </li>
-                            <!-- User Dropdown -->
-                            <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                                <button class="flex items-center gap-1 w-11 h-11">
-                                    <img
-                                        src="{{ Auth::user()->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=38bdf8&color=fff&rounded=true' }}"
-                                        alt="User Avatar"
-                                        class="h-9 w-9 rounded-full object-cover"
-                                    >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 dark:text-gray-300"
-                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </button>
-                                <div
-                                    x-show="open"
-                                    x-cloak
-                                    class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg z-50 py-4 px-4 text-center transition border border-gray-100 dark:border-gray-700"
-                                    x-transition
-                                >
-                                    <div class="mb-3">
-                            <span
-                                class="block font-bold text-lg text-emerald-700 dark:text-emerald-300">{{ Auth::user()->name }}</span>
-                                        <span
-                                            class="block text-xs text-gray-500 dark:text-gray-400 mb-2">{{ Auth::user()->email }}</span>
-                                    </div>
-                                    <a href="{{ route('profile.edit') }}"
-                                       class="block w-full py-2 my-2 rounded-lg bg-blue-50 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-700 text-blue-700 dark:text-blue-300 font-semibold transition">
-                                        Profile
-                                    </a>
-                                    <a href="{{ route('orders.history') }}" class="block w-full py-2 my-2 rounded-lg bg-yellow-200 dark:bg-gray-800 hover:bg-yellow-400 dark:hover:bg-blue-700 text-black dark:text-blue-300 font-semibold transition">All Order</a>
-
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-                                        <button type="submit"
-                                                class="w-full py-2 mt-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold shadow transition">
-                                            Log out
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                    @elseif(auth()->check() && auth()->user()->role === 'user')
-            <!-- Right: Icons nav + user -->
-            <div class="flex items-center gap-2">
-                @auth
-                    <ul class="flex">
-                        <!-- الرئيسية -->
-                        <li>
-                            <a href="{{ route('home') }}"
-                               class="flex items-center justify-center w-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                               title="Home">
-                                <span class="material-symbols-outlined  " style="color: #5e5e5e;" >
-                                home
-                                </span>
-                            </a>
-                        </li>
-                        <!-- المنتجات -->
-                        <li>
-                            <a href="{{ route('products.index') }}"
-                               class="flex items-center justify-center w-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                               title="Products">
-                                <span class="material-symbols-outlined" style="color: #5e5e5e;">shopping_bag</span>
-                            </a>
-                        </li>
-                        <!-- السلة -->
-                        <li>
-                            <a href="{{ route('cart.show') }}"
-                               style="color: #5e5e5e;"
-                               class="flex items-center justify-center w-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                               title="Cart">
-                                <span class="material-symbols-outlined">add_shopping_cart</span>
-                            </a>
-                        </li>
-                        <!-- User Dropdown -->
-                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
-                            <button class="flex items-center gap-1 w-11 h-11">
-                                <img
-                                    src="{{ Auth::user()->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=38bdf8&color=fff&rounded=true' }}"
-                                    alt="User Avatar"
-                                    class="h-9 w-9 rounded-full object-cover"
-                                >
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 dark:text-gray-300"
-                                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M19 9l-7 7-7-7"/>
-                                </svg>
-                            </button>
-                            <div
-                                x-show="open"
-                                x-cloak
-                                class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg z-50 py-4 px-4 text-center transition border border-gray-100 dark:border-gray-700"
-                                x-transition
-                            >
-                                <div class="mb-3">
-                            <span
-                                class="block font-bold text-lg text-emerald-700 dark:text-emerald-300">{{ Auth::user()->name }}</span>
-                                    <span
-                                        class="block text-xs text-gray-500 dark:text-gray-400 mb-2">{{ Auth::user()->email }}</span>
-                                </div>
-                                <a href="{{ route('profile.edit') }}"
-                                   class="block w-full py-2 my-2 rounded-lg bg-blue-50 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-700 text-blue-700 dark:text-blue-300 font-semibold transition">
-                                    Profile
-                                </a>
-                                <a href="{{ route('orders.history') }}" class="block w-full py-2 my-2 rounded-lg bg-yellow-200 dark:bg-gray-800 hover:bg-yellow-400 dark:hover:bg-blue-700 text-black dark:text-blue-300 font-semibold transition">All Order</a>
-
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit"
-                                            class="w-full py-2 mt-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold shadow transition">
-                                        Log out
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    @endif
-                </ul>
-            @else
-
-                    <div class="flex gap-4">
-                        <a href="{{ route('home') }}"
+        <!-- Right: Icons nav + user -->
+        <div class="flex items-center gap-2">
+            @auth
+                <ul class="flex">
+                    <!-- المنتجات -->
+                    <li>
+                        <a href="{{ route('products.index') }}"
                            class="flex items-center justify-center w-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
-                           title="Home">
-                                <span class="material-symbols-outlined  " style="color: #5e5e5e;" >
-                                home
-                                </span>
+                           title="المنتجات">
+                            <span class="material-symbols-outlined" style="color: #5e5e5e;">shopping_bag</span>
                         </a>
-                        </li>
-                        <a href="{{ route('login') }}"
-                           class="px-5 py-2 rounded-xl bg-blue-500 hover:bg-blue-700 text-white font-semibold shadow transition">
-                            Login
+                    </li>
+                    <!-- السلة -->
+                    <li>
+                        <a href="{{ route('cart.show') }}"
+                           style="color: #5e5e5e;"
+                           class="flex items-center justify-center w-8 rounded-xl transition text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-800"
+                           title="السلة">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
                         </a>
+                    </li>
+                </ul>
+                <!-- User Dropdown -->
+                <div class="relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false">
+                    <button class="flex items-center gap-1 w-11 h-11">
+                        <img
+                            src="{{ Auth::user()->avatar_url ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=38bdf8&color=fff&rounded=true' }}"
+                            alt="User Avatar"
+                            class="h-9 w-9 rounded-full object-cover"
+                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 dark:text-gray-300"
+                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div
+                        x-show="open"
+                        x-cloak
+                        class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-lg z-50 py-4 px-4 text-center transition border border-gray-100 dark:border-gray-700"
+                        x-transition
+                    >
+                        <div class="mb-3">
+                            <span class="block font-bold text-lg text-emerald-700 dark:text-emerald-300">{{ Auth::user()->name }}</span>
+                            <span class="block text-xs text-gray-500 dark:text-gray-400 mb-2">{{ Auth::user()->email }}</span>
+                        </div>
+                        <a href="{{ route('profile.edit') }}"
+                           class="block w-full py-2 my-2 rounded-lg bg-blue-50 dark:bg-gray-800 hover:bg-blue-100 dark:hover:bg-blue-700 text-blue-700 dark:text-blue-300 font-semibold transition">
+                            الملف الشخصي
+                        </a>
+                        <a href="{{ route('orders.history') }}"
+                           class="block w-full py-2 my-2 rounded-lg bg-yellow-200 dark:bg-gray-800 hover:bg-yellow-400 dark:hover:bg-blue-700 text-black dark:text-blue-300 font-semibold transition">
+                            كل الطلبات
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                    class="w-full py-2 mt-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-semibold shadow transition">
+                                تسجيل الخروج
+                            </button>
+                        </form>
                     </div>
-
+                </div>
+            @else
+                <div class="flex gap-4">
+                    <a href="{{ route('login') }}"
+                       class="px-5 py-2 rounded-xl bg-blue-500 hover:bg-blue-700 text-white font-semibold shadow transition">
+                        تسجيل الدخول
+                    </a>
+                </div>
             @endauth
         </div>
     </div>
@@ -222,7 +133,7 @@
                 type="text"
                 name="search"
                 value="{{ request('search') }}"
-                placeholder="Search for a product or product type..."
+                placeholder="ابحث عن منتج أو نوع المنتج..."
                 autocomplete="off"
                 class="flex-1 h-11 px-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition text-base w-full"
             >
@@ -263,7 +174,7 @@
                         list += '<li class="px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200" onclick="selectSuggestion(\'' + inputId + '\', \'' + suggestionsId + '\', \'' + item.replace(/'/g, "\\'") + '\')">' + item + '</li>';
                     });
                 } else {
-                    list = '<li class="px-4 py-2 text-gray-400">No results</li>';
+                    list = '<li class="px-4 py-2 text-gray-400">لا توجد نتائج</li>';
                 }
                 $('#' + suggestionsId).html(list).show();
             });
@@ -273,8 +184,6 @@
     function selectSuggestion(inputId, suggestionsId, val) {
         $('#' + inputId).val(val);
         $('#' + suggestionsId).hide().empty();
-        // يمكنك عمل submit للفورم تلقائيًا إذا أردت:
-        // $('#' + inputId).closest('form').submit();
     }
 
     $(function () {

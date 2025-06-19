@@ -2,12 +2,16 @@
 
 @section('content')
     <style>
-        [x-cloak] { display: none !important; }
+        [x-cloak] {
+            display: none !important;
+        }
+
         /* شريط التمرير مخفي */
         .hide-scrollbar {
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
+
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -44,7 +48,7 @@
     @if(isset($exactProduct) && $exactProduct)
         <h3 class="text-xl font-bold text-emerald-600 mb-4">Exact match:</h3>
         <div class="grid grid-cols-1 gap-8 mb-8">
-            @include('products._card', ['product' => $exactProduct])
+            @include('user.products._card', ['product' => $exactProduct])
         </div>
     @endif
 
@@ -52,14 +56,14 @@
         <h3 class="text-xl font-bold text-blue-700 mb-4">Similar products:</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             @foreach($similarProducts as $product)
-                @include('products._card', ['product' => $product])
+                @include('user.products._card', ['product' => $product])
             @endforeach
         </div>
     @elseif(isset($products) && $products->count())
         <h3 class="text-2xl font-bold text-blue-700 dark:text-emerald-300 mb-10 tracking-tight"></h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             @foreach($products as $product)
-                @include('products._card', ['product' => $product])
+                @include('user.products._card', ['product' => $product])
             @endforeach
         </div>
     @else

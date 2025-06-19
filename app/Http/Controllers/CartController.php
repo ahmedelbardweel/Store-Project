@@ -120,7 +120,7 @@ class CartController extends Controller
         $orderItems = $order ? $order->items()->with('product')->get() : collect();
         $total = $order ? $order->total : 0;
 
-        return view('cart.index', compact('orderItems', 'total'));
+        return view('user.cart.index', compact('orderItems', 'total'));
     }
 
     public function increase($id)
@@ -183,7 +183,7 @@ class CartController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('cart.orders_history', compact('orders'));
+        return view('user.cart.orders_history', compact('orders'));
     }
 
 // عرض الطلبيات الالي ضيفتها
@@ -196,7 +196,7 @@ class CartController extends Controller
             ->with('items.product')
             ->firstOrFail();
 
-        return view('cart.order_details', compact('order'));
+        return view('user.cart.order_details', compact('order'));
     }
 
 //  نزيل الفاتورة بعد الاكتمال
@@ -205,7 +205,7 @@ class CartController extends Controller
         $order = Order::with('orderItems.product')->findOrFail($id);
 
         // يمكنك إنشاء Blade جديد للفاتورة مثلاً: resources/views/orders/invoice.blade.php
-        $pdf = Pdf::loadView('orders.invoice', compact('order'));
+        $pdf = Pdf::loadView('user.orders.invoice', compact('order'));
         $filename = "invoice_order_{$order->id}.pdf";
 
         return $pdf->download($filename);

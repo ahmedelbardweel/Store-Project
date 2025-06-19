@@ -55,7 +55,7 @@ class ProductController extends Controller
             $products = $productsQuery->latest()->get();
         }
 
-        return view('products.index', compact('products', 'slugs', 'selectedSlug', 'exactProduct', 'similarProducts'));
+        return view('user.products.index', compact('products', 'slugs', 'selectedSlug', 'exactProduct', 'similarProducts'));
     }
 
     // نموذج إضافة منتج (فقط للأدمن)
@@ -168,7 +168,7 @@ class ProductController extends Controller
             ->take(20)
             ->get();
 
-        return view('products.show', compact('product', 'relatedProducts'));
+        return view('user.products.show', compact('product', 'relatedProducts'));
     }
 
     // بحث الاقتراحات (autocomplete)

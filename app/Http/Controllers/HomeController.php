@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    // جلب آخر 6 منتجات من قاعدة البيانات (يمكنك تغيير العدد حسب حاجتك)
     public function home()
     {
-        $products = Product::orderBy('created_at', 'desc')->take(3)->get();
-        return view('Home.home', compact('products'));
+        // جلب المنتجات من قاعدة البيانات (مثلاً أفضل 6 منتجات)
+        $products = Product::latest()->take(6)->get();
+
+        // إرسالها إلى الـ view
+        return view('home', compact('products'));
     }
 }
+

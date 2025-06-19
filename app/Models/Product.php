@@ -15,4 +15,16 @@ class Product extends Model
         'price',
         'img',    // ↩ هنا تأكد من وجود Img
     ];
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\Review::class);
+    }
+    public function replies()
+    {
+        return $this->hasMany(\App\Models\Reply::class);
+    }
+
+
+
+
 }
