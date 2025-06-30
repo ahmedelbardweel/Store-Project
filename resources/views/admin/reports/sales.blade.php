@@ -1,30 +1,33 @@
 @extends('layouts.admin')
 @section('content')
-    <h1 class="text-2xl font-bold mb-4">إحصائيات المبيعات</h1>
-    <div class="mb-4 bg-white p-4 rounded shadow">
-        <p>إجمالي المبيعات: <b>{{ $totalSales }}</b></p>
-        <p>عدد الطلبات المكتملة: <b>{{ $ordersCount }}</b></p>
-        {{-- يمكنك هنا إضافة رسم بياني عبر chart.js --}}
+    <h1 class="text-2xl font-black mb-4">Sales Statistics</h1>
+    <div class="mb-6 bg-white dark:bg-gray-900 p-5 rounded-none shadow border">
+        <p>Total Sales: <b class="text-emerald-700 dark:text-emerald-300">${{ $totalSales }}</b></p>
+        <p>Completed Orders: <b class="text-blue-700 dark:text-blue-300">{{ $ordersCount }}</b></p>
+        {{-- You can add a chart here using Chart.js --}}
     </div>
-    {{-- جدول تفصيلي --}}
-    <table class="w-full text-center bg-white rounded shadow">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>المستخدم</th>
-            <th>المبلغ</th>
-            <th>التاريخ</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($completedOrders as $o)
+
+    {{-- Responsive Table --}}
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-center bg-white dark:bg-gray-900 rounded-none shadow border">
+            <thead class="bg-emerald-50 dark:bg-gray-800">
             <tr>
-                <td>{{ $o->id }}</td>
-                <td>{{ $o->user->name ?? '' }}</td>
-                <td>{{ $o->total }}</td>
-                <td>{{ $o->created_at->format('Y-m-d') }}</td>
+                <th class="py-3 px-2 border-b font-semibold text-sm text-gray-700 dark:text-gray-300">#</th>
+                <th class="py-3 px-2 border-b font-semibold text-sm text-gray-700 dark:text-gray-300">User</th>
+                <th class="py-3 px-2 border-b font-semibold text-sm text-gray-700 dark:text-gray-300">Amount</th>
+                <th class="py-3 px-2 border-b font-semibold text-sm text-gray-700 dark:text-gray-300">Date</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach($completedOrders as $o)
+                <tr class="hover:bg-emerald-50 dark:hover:bg-gray-800">
+                    <td class="py-2 px-2 border-b">{{ $o->id }}</td>
+                    <td class="py-2 px-2 border-b">{{ $o->user->name ?? '-' }}</td>
+                    <td class="py-2 px-2 border-b font-bold text-emerald-700 dark:text-emerald-300">${{ $o->total }}</td>
+                    <td class="py-2 px-2 border-b">{{ $o->created_at->format('Y-m-d') }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection

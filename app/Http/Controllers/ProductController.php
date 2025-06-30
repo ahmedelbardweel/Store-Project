@@ -13,7 +13,7 @@ class ProductController extends Controller
         $this->middleware('auth')->except(['index', 'show', 'autocomplete']);
     }
 
-    // قائمة المنتجات (بحث متطور)
+// قائمة المنتجات (بحث متطور)
     public function index(Request $request)
     {
         $slugs = \App\Models\Product::whereNotNull('slug')
@@ -35,28 +35,34 @@ class ProductController extends Controller
         if ($request->has('search') && trim($request->search) !== '') {
             $search = trim($request->search);
 
-            // 1. جلب كل المنتجات التي تحتوي الاسم أو الوصف
             $productsFound = \App\Models\Product::where('name', 'LIKE', "%{$search}%")
                 ->orWhere('description', 'LIKE', "%{$search}%")
                 ->get();
 
-            // 2. المنتج المطابق تماماً (اسم المنتج = البحث)
             $exactProduct = $productsFound->firstWhere('name', $search);
+            $similarProducts = $productsFound->filter(fn($product) => $product->name !== $search);
 
-            // 3. المنتجات المشابهة (يستثنى المطابق تماماً)
-            $similarProducts = $productsFound->filter(function ($product) use ($search) {
-                return $product->name !== $search;
-            });
-
-            // لعرض النتائج فقط:
-            $products = collect(); // فارغة حتى لا تظهر كل المنتجات
+            // **هنا** ضع تعريف للـ $products (حتى لو فارغ)
+            $products = collect();
+            $sections = [];
         } else {
-            // في حال لا يوجد بحث: كل المنتجات
             $products = $productsQuery->latest()->get();
+
+            $sections = [];
+            foreach ($slugs as $slug) {
+                $productsInSection = $products->where('slug', $slug);
+                if ($productsInSection->count()) {
+                    $sections[$slug] = $productsInSection;
+                }
+            }
         }
 
-        return view('user.products.index', compact('products', 'slugs', 'selectedSlug', 'exactProduct', 'similarProducts'));
+        // **هنا تأكد أن جميع المتغيرات تمر للواجهة**
+        return view('user.products.index', compact(
+            'products', 'slugs', 'selectedSlug', 'exactProduct', 'similarProducts', 'sections'
+        ));
     }
+
 
     // نموذج إضافة منتج (فقط للأدمن)
     public function create()
@@ -176,20 +182,22 @@ class ProductController extends Controller
     {
         $results = [];
 
-        if ($request->has('q')) {
+        if ($request->filled('q')) {
             $term = trim($request->q);
-            $words = array_filter(explode(' ', $term));
 
-            $query = Product::query();
+            // البحث الجزئي عن أي منتج يحتوي على ما تم إدخاله (case-insensitive)
+            $products = \App\Models\Product::where('name', 'LIKE', "%{$term}%")
+                ->orWhere('description', 'LIKE', "%{$term}%")
+                ->orderByRaw("INSTR(name, ?) asc", [$term]) // الأولوية للأقرب للبداية
+                ->limit(10)
+                ->get(['name', 'slug', 'id']);
 
-            $query->where(function($q) use ($words) {
-                foreach ($words as $word) {
-                    $q->orWhere('name', 'LIKE', "%{$word}%")
-                        ->orWhere('description', 'LIKE', "%{$word}%");
-                }
-            });
-
-            $results = $query->limit(8)->pluck('name');
+            foreach ($products as $product) {
+                $results[] = [
+                    'name' => $product->name,
+                    'url'  => route('products.show', [$product->slug, \Illuminate\Support\Str::slug($product->name)]),
+                ];
+            }
         }
 
         return response()->json($results);

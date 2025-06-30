@@ -1,57 +1,56 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="p-8">
-        <h1 class="text-2xl font-bold mb-6">تفاصيل الطلب رقم #{{ $order->id }}</h1>
+    <div class="p-6 sm:p-10 max-w-3xl mx-auto">
+        <h1 class="text-2xl font-black mb-6">Order Details #{{ $order->id }}</h1>
 
-        <div class="bg-white dark:bg-gray-900 rounded-xl shadow p-6 mb-8">
-            <p><span class="font-bold">العميل:</span> {{ $order->user->name ?? '---' }}</p>
-            <p><span class="font-bold">الإيميل:</span> {{ $order->user->email ?? '---' }}</p>
-            <p><span class="font-bold">الإجمالي:</span> {{ $order->total }} $</p>
-            <p><span class="font-bold">الحالة:</span>
+        {{-- معلومات الطلب --}}
+        <div class="bg-white dark:bg-gray-900 shadow border border-gray-200 dark:border-gray-800 mb-6 px-6 py-5 flex flex-col gap-2" style="border-radius:0">
+            <div><b>Customer:</b> {{ $order->user->name ?? '---' }}</div>
+            <div><b>Email:</b> {{ $order->user->email ?? '---' }}</div>
+            <div><b>Subtotal:</b> <span class="font-mono">{{ $order->total }} $</span></div>
+            <div>
+                <b>Status:</b>
                 @if($order->status === 'completed')
-                    <span class="text-green-700 font-semibold">مكتمل</span>
+                    <span class="text-green-700 font-semibold">Completed</span>
+                @elseif($order->status === 'canceled')
+                    <span class="text-red-700 font-semibold">Canceled</span>
                 @else
-                    <span class="text-yellow-700 font-semibold">قيد التنفيذ</span>
+                    <span class="text-yellow-700 font-semibold">Processing</span>
                 @endif
-            </p>
-            <p><span class="font-bold">تاريخ الطلب:</span> {{ $order->created_at }}</p>
+            </div>
+            <div><b>Order Date:</b> {{ $order->created_at->format('Y-m-d H:i') }}</div>
         </div>
 
-        {{-- تفاصيل المنتجات في الطلب --}}
-        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl shadow p-6">
-            <h2 class="text-lg font-semibold mb-4">منتجات الطلب:</h2>
-            @if($order->items && count($order->items))
-                <table class="w-full text-right border">
-                    <thead>
-                    <tr>
-                        <th class="p-2">المنتج</th>
-                        <th class="p-2">السعر</th>
-                        <th class="p-2">الكمية</th>
-                        <th class="p-2">الإجمالي</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($order->items as $item)
-                        <tr class="border-b">
-                            <td class="py-2">{{ $item->product->name ?? '---' }}</td>
-                            <td class="py-2">{{ $item->price }}</td>
-                            <td class="py-2">{{ $item->quantity }}</td>
-                            <td class="py-2">{{ $item->price * $item->quantity }}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            @else
-                <p class="text-gray-500 text-center">لا توجد منتجات في هذا الطلب</p>
-            @endif
-        </div>
+        {{-- المنتجات في الطلب --}}
+        <h2 class="font-bold text-lg mb-4">Order Products:</h2>
+        @if($order->items && count($order->items))
+            <div class="grid gap-5 md:grid-cols-2">
+                @foreach($order->items as $item)
+                    <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow px-5 py-4 flex flex-col sm:flex-row gap-4 items-center" style="border-radius:0">
+                        <div class="w-28 h-28 flex-shrink-0 flex items-center justify-center border border-gray-100 dark:border-gray-700 bg-white" style="border-radius:0">
+                            <img src="{{ $item->product->img ?? 'https://via.placeholder.com/90' }}"
+                                 alt="{{ $item->product->name ?? '' }}"
+                                 class="object-contain w-20 h-20" style="border-radius:0">
+                        </div>
+                        <div class="flex-1 flex flex-col justify-between gap-1 text-center sm:text-left">
+                            <div class="font-bold text-emerald-800 dark:text-emerald-200 text-base mb-1">{{ $item->product->name ?? '---' }}</div>
+                            <div class="text-gray-700 dark:text-gray-300 text-sm">Price: <b>{{ $item->price }} $</b></div>
+                            <div class="text-gray-700 dark:text-gray-300 text-sm">Quantity: <b>{{ $item->quantity }}</b></div>
+                            <div class="text-gray-900 dark:text-white font-bold">Subtotal: {{ $item->price * $item->quantity }} $</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="text-gray-500 text-center">No products in this order</p>
+        @endif
 
-        {{-- زر العودة --}}
-        <div class="mt-6">
+        <div class="mt-7">
             <a href="{{ route('admin.orders.index') }}"
-               class="bg-blue-200 hover:bg-emerald-700 text-black py-2 px-4 rounded-xl font-semibold transition">
-                ← رجوع لقائمة الطلبات
+               class="bg-blue-200 hover:bg-emerald-700 text-black font-semibold py-2 px-4 border border-gray-200 dark:border-gray-700 shadow transition"
+               style="border-radius:0">
+                &larr; Back to Orders List
             </a>
         </div>
     </div>

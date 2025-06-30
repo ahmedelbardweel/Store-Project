@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Stripe\Stripe;
+use Stripe\Checkout\Session as StripeSession;
 
 
 
@@ -27,12 +29,23 @@ class CartController extends Controller
     {
         $key = 'cart_' . auth()->id();
         $cart = session()->get($key, []);
-        if(isset($cart[$id])) {
+        if (isset($cart[$id])) {
             $cart[$id]++;
         } else {
             $cart[$id] = 1;
         }
         session()->put($key, $cart);
+
+        // AJAX RESPONSE
+        if ($request->ajax()) {
+            $cartCount = array_sum($cart);
+            return response()->json([
+                'success' => true,
+                'cart_count' => $cartCount,
+                'message' => 'The product has been added to the cart.'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'The product has been added to the cart.');
     }
 
@@ -64,7 +77,7 @@ class CartController extends Controller
     }
 
 // اضافة الى السلة
-    public function addToCart($productId)
+    public function addToCart($productId, Request $request)
     {
         $user = Auth::user();
         $product = Product::findOrFail($productId);
@@ -79,11 +92,9 @@ class CartController extends Controller
         $orderItem = $order->items()->where('product_id', $product->id)->first();
 
         if ($orderItem) {
-            // إذا كان موجود: زِد الكمية
             $orderItem->quantity += 1;
             $orderItem->save();
         } else {
-            // إذا جديد: أضف كعنصر جديد
             $order->items()->create([
                 'product_id' => $product->id,
                 'quantity' => 1,
@@ -95,7 +106,18 @@ class CartController extends Controller
         $order->total = $order->items()->sum(\DB::raw('quantity * price'));
         $order->save();
 
-        return redirect()->back()->with('success', 'تمت إضافة المنتج إلى السلة بنجاح!');
+        // AJAX RESPONSE
+        if ($request->ajax()) {
+            $cartCount = $order->items()->sum('quantity');
+            return response()->json([
+                'success' => true,
+                'cart_count' => $cartCount,
+                'message' => 'The product has been added to the cart.'
+            ]);
+        }
+
+        // Redirect عادي إذا ليس AJAX
+        return redirect()->back()->with('success', 'The product has been added to the cart.');
     }
 
 // افراغ السلة
@@ -210,6 +232,33 @@ class CartController extends Controller
 
         return $pdf->download($filename);
     }
+
+public function stripeCheckout(Request $request)
+{
+    Stripe::setApiKey(env('STRIPE_SECRET'));
+    // احسب المجموع الكلي من السلة أو من البيانات
+    $amount = auth()->user()->cart_total * 100; // Stripe uses cents
+
+    $session = StripeSession::create([
+        'payment_method_types' => ['card'],
+        'line_items' => [[
+            'price_data' => [
+                'currency' => 'usd',
+                'product_data' => [
+                    'name' => 'Order from ' . auth()->user()->name,
+                ],
+                'unit_amount' => $amount,
+            ],
+            'quantity' => 1,
+        ]],
+        'mode' => 'payment',
+        'success_url' => route('orders.history') . '?success=1',
+        'cancel_url' => route('cart.show') . '?canceled=1',
+    ]);
+
+    return redirect($session->url);
+}
+
 
 
 }

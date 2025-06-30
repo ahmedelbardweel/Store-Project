@@ -20,9 +20,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role')->default('user');
+            $table->string('avatar_url')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->string('api_key', 80)->unique()->nullable()->after('password');
+            $table->string('api_key', 80)->nullable();
         });
     }
 

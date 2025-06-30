@@ -1,12 +1,14 @@
 @extends('layouts.admin')
-@section('title', 'التقارير')
+@section('title', 'Reports')
 
 @section('content')
-    <h1 class="text-2xl font-bold mb-6">لوحة تقارير المبيعات</h1>
-    <p class="mb-8 text-gray-600 dark:text-gray-300">رسم بياني توضيحي لإجمالي المبيعات خلال آخر 7 أيام</p>
+    <h1 class="text-2xl font-bold mb-6">Sales Reports Dashboard</h1>
+    <p class="mb-8 text-gray-600 dark:text-gray-300">A line chart showing total sales for the last 7 days</p>
 
-    <div class=" bg-white dark:bg-gray-900 p-8">
-        <canvas id="salesChart" height="90"></canvas>
+    <div class="bg-white dark:bg-gray-900 p-8 rounded-none border shadow">
+        <div class="w-full" style="min-height: 300px;">
+            <canvas id="salesChart" height="120"></canvas>
+        </div>
     </div>
 @endsection
 
@@ -22,7 +24,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'إجمالي المبيعات ($)',
+                    label: 'Total Sales ($)',
                     data: salesData,
                     fill: true,
                     borderColor: '#10b981',
@@ -34,21 +36,31 @@
                 }]
             },
             options: {
+                maintainAspectRatio: false,
                 responsive: true,
                 plugins: {
-                    legend: { display: true },
+                    legend: {
+                        display: true,
+                        labels: { color: "#222" } // نص غامق دائمًا
+                    },
                     title: { display: false }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            color: '#444',
+                            color: '#222', // نص غامق دائمًا
                             stepSize: 50
+                        },
+                        grid: {
+                            color: 'rgba(34,34,34,0.05)' // خطوط فاتحة خفيفة
                         }
                     },
                     x: {
-                        ticks: { color: '#444' }
+                        ticks: { color: '#222' }, // نص غامق دائمًا
+                        grid: {
+                            color: 'rgba(34,34,34,0.05)'
+                        }
                     }
                 }
             }
